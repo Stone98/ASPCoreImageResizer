@@ -1,33 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-// https://docs.microsoft.com/en-us/aspnet/core/mvc/models/file-uploads?view=aspnetcore-5.0
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
 namespace ASPCoreImageResizer.Pages
 {
-    public class IndexModel : PageModel
+    public class BufferedSingleFileUploadDbModelModel : PageModel
     {
         [BindProperty]
         public BufferedSingleFileUploadDb FileUpload { get; set; }
-
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
-        {
-            _logger = logger;
-        }
-
         public void OnGet()
         {
-
-        }
-        public async Task<IActionResult> OnPostAsync()
-        {
-            return (IActionResult)Task.CompletedTask;
         }
         public async Task<IActionResult> OnPostUploadAsync(List<IFormFile> files)
         {
@@ -47,5 +35,11 @@ namespace ASPCoreImageResizer.Pages
             }
             return (IActionResult)Task.CompletedTask;
         }
+    }
+    public class BufferedSingleFileUploadDb
+    {
+        [Required]
+        [Display(Name = "File")]
+        public IFormFile FormFile { get; set; }
     }
 }

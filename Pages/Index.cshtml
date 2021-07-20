@@ -3,8 +3,35 @@
 @{
     ViewData["Title"] = "Image Resizer";
 }
-
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <form id="resize-form" action="BufferedSingleFileUploadPhysical/?handler=Upload"
+          enctype="multipart/form-data" onsubmit="return false;"
+          method="post">
+        <h1 class="display-4">Welcome</h1>
+        <h2>Image Resizer</h2>
+        <p>Easily resize an image.</p>
+        <div class="image-dropbox" id="image-dropbox">
+            <button id="open-image-btn" onclick="document.getElementById('btn-choose-img').click()">
+                Open Image
+            </button>
+            <input type="file" asp-for="FileUpload.FormFiles" id="btn-choose-img" style="display: none" onchange="imagePicked()" accept="image/png, image/jpeg" />
+        </div>
+        <div id="img-dimensions" style="visibility: hidden">
+            <p>Original Size:</p>
+            <p id="img-width">Width: 0</p>
+            <p id="img-height">Height: 0</p>
+            <label for="img-new-width">New Width</label>
+            <input type="number" name="img-new-width" id="img-new-width" onblur="widthChanged()" />
+            <label for="img-new-height">New Height</label>
+            <input type="number" name="img-new-height" id="img-new-height" onblur="heightChanged()" />
+            <div id="error-message" style="color: red">
+                Please choose an image.
+            </div>
+            <button id="submit-btn" onclick="resizeImage()">Resize Image</button>
+        </div>
+        <p>This image resizer brought to you by <a href="https://github.com/Stone98">Stone98</a>.</p>
+        <div style="margin-top:15px">
+            <output name="result"></output>
+        </div>
+    </form>
 </div>
