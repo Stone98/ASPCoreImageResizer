@@ -4,3 +4,5 @@
 ### TODO:
 1. Temporary images need to be cleaned up in the uploads folder.
 2. Upload image size needs to be restricted.
+
+![Image Resizer Thumbnail](ASPCoreImageResizerThumbnail.png)
