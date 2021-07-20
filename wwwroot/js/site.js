@@ -2,8 +2,11 @@
     let files = document.getElementById('btn-choose-img').files;
     if (files.length > 0) {
         let file = files[0];
-        let img = document.createElement("img");
-        img.setAttribute("id", "img-picked");
+        let img = document.getElementById("img-picked");
+        if (img == null) {
+            img = document.createElement("img");
+            img.setAttribute("id", "img-picked");
+        }
         img.src = URL.createObjectURL(file);
         img.onload = onImageLoaded;
         document.getElementById("image-dropbox").appendChild(img);
@@ -43,11 +46,11 @@ function resizeImage() {
         btn.disabled = true;
         let openImageBtn = document.getElementById("open-image-btn");
         openImageBtn.innerHTML = "Processing";
-        openImageBtn.disabled = true;
+        openImageBtn.readOnly = true;
         let widthInput = document.getElementById("img-new-width");
-        widthInput.disabled = true;
+        widthInput.readOnly = true;
         let heightInput = document.getElementById("img-new-height");
-        heightInput.disabled = true;
+        heightInput.readOnly = true;
         let form = document.getElementById("resize-form");
         AJAXSubmit(form);
     }
@@ -95,23 +98,44 @@ function heightChanged() {
     document.getElementById("img-new-width").value = newWidth;
 }
 
-async function AJAXSubmit(oFormElement) {
+function AJAXSubmit(oFormElement) {
     var resultElement = oFormElement.elements.namedItem("result");
     const formData = new FormData(oFormElement);
 
     try {
-        const response = await fetch(oFormElement.action, {
+        const response = fetch(oFormElement.action, {
             method: 'POST',
             body: formData
+        }).then(function (response) {
+
+            if (response.ok) {
+                response.json().then(function (data) {
+                    createImage(data["path"]);
+                });
+            }
+            /*resultElement.value = 'Result: ' + response.status + ' ' + response.statusText;*/
         });
-
-        if (response.ok) {
-            window.location.href = '/';
-        }
-
-        resultElement.value = 'Result: ' + response.status + ' ' +
-            response.statusText;
     } catch (error) {
         console.error('Error:', error);
     }
+}
+
+function createImage(path) {
+    console.log(path);
+    let img = document.createElement("img");
+    img.setAttribute("id", "resized-img");
+    img.src = path;
+    let holder = document.getElementById("resize-img-holder");
+    holder.innerHTML = "";
+    holder.appendChild(img);
+    let btn = document.getElementById("submit-btn");
+    btn.innerHTML = "Resize Image";
+    btn.disabled = false;
+    let openImageBtn = document.getElementById("open-image-btn");
+    openImageBtn.innerHTML = "Open Image";
+    openImageBtn.readOnly = false;
+    let widthInput = document.getElementById("img-new-width");
+    widthInput.readOnly = false;
+    let heightInput = document.getElementById("img-new-height");
+    heightInput.readOnly = false;
 }

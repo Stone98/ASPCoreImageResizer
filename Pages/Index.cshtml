@@ -4,9 +4,7 @@
     ViewData["Title"] = "Image Resizer";
 }
 <div class="text-center">
-    <form id="resize-form" action="BufferedSingleFileUploadPhysical/?handler=Upload"
-          enctype="multipart/form-data" onsubmit="return false;"
-          method="post">
+    <form id="resize-form" enctype="multipart/form-data" onsubmit="return false;" method="post">
         <h1 class="display-4">Welcome</h1>
         <h2>Image Resizer</h2>
         <p>Easily resize an image.</p>
@@ -14,7 +12,7 @@
             <button id="open-image-btn" onclick="document.getElementById('btn-choose-img').click()">
                 Open Image
             </button>
-            <input type="file" asp-for="FileUpload.FormFiles" id="btn-choose-img" style="display: none" onchange="imagePicked()" accept="image/png, image/jpeg" />
+            <input type="file" name="File" id="btn-choose-img" style="display: none" onchange="imagePicked()" accept="image/png, image/jpeg" />
         </div>
         <div id="img-dimensions" style="visibility: hidden">
             <p>Original Size:</p>
@@ -33,5 +31,6 @@
         <div style="margin-top:15px">
             <output name="result"></output>
         </div>
+        <div id="resize-img-holder"></div>
     </form>
 </div>
